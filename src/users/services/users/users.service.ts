@@ -20,6 +20,7 @@ export class UsersService {
   ) {}
 
   findUsers() {
+    //get the record match from users
     return this.userRepository.find({ relations: ['profile', 'posts'] });
   }
 
@@ -28,10 +29,12 @@ export class UsersService {
       ...userDetails,
       createdAt: new Date(),
     });
+    //save the newUser object (the newly created user record) to the database using the save method of the userRepository
     return this.userRepository.save(newUser);
   }
 
   updateUser(id: number, updateUserDetails: UpdateUserParams) {
+    //update: id to identify the user to update. updateUserDetails: contain new data to be applied to the user
     return this.userRepository.update({ id }, { ...updateUserDetails });
   }
 

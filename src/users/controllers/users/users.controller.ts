@@ -7,6 +7,8 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from '../../dtos/CreateUser.dto';
 import { CreateUserPostDto } from '../../dtos/CreateUserPost.dto';
@@ -23,12 +25,16 @@ export class UsersController {
   }
 
   @Post()
+  @UsePipes(new ValidationPipe())
+  //body : extract data sent in the body of an HTTP request
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
+  
 
   @Put(':id')
   async updateUserById(
+    // ParseIntPipe to transfer string to number. params to extract in URL
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
@@ -40,6 +46,7 @@ export class UsersController {
     await this.userService.deleteUser(id);
   }
 
+  //one-to-one relationship between user and profile  
   @Post(':id/profiles')
   createUserProfile(
     @Param('id', ParseIntPipe) id: number,
@@ -47,6 +54,7 @@ export class UsersController {
   ) {
     return this.userService.createUserProfile(id, createUserProfileDto);
   }
+
 
   @Post(':id/posts')
   createUserPost(
