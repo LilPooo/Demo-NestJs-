@@ -10,6 +10,7 @@ import {
   CreateUserProfileParams,
   UpdateUserParams,
 } from '../../../utils/types';
+import { CheckUserLoginDto } from 'src/users/dtos/CheckUserLogin.dts';
 
 @Injectable()
 export class UsersService {
@@ -31,6 +32,20 @@ export class UsersService {
     });
     //save the newUser object (the newly created user record) to the database using the save method of the userRepository
     return this.userRepository.save(newUser);
+  }
+
+  async checkUserLogin(userDetails:CheckUserLoginDto){
+    const {username,password}=userDetails;
+    const user = await this.userRepository.findOne({ where: { username } });
+    if(!user){
+      return {message: 'User does not exist'}
+    }
+    if(user.password!== password){
+      return {message: 'Password does not match'}
+    }
+
+    return {message:'You have successfully logged in'};
+    
   }
 
   updateUser(id: number, updateUserDetails: UpdateUserParams) {

@@ -15,6 +15,7 @@ import { CreateUserPostDto } from '../../dtos/CreateUserPost.dto';
 import { CreateUserProfileDto } from '../../dtos/CreateUserProfile.dto';
 import { UpdateUserDto } from '../../dtos/UpdateUser.dto';
 import { UsersService } from '../../services/users/users.service';
+import { CheckUserLoginDto} from 'src/users/dtos/CheckUserLogin.dts';
 
 @Controller('users')
 export class UsersController {
@@ -31,6 +32,12 @@ export class UsersController {
     return this.userService.createUser(createUserDto);
   }
   
+  @Post('login')
+  // check valid login
+  async login(@Body() CheckUserLoginDto: CheckUserLoginDto) {
+    return this.userService.checkUserLogin(CheckUserLoginDto);
+  }
+
 
   @Put(':id')
   async updateUserById(
